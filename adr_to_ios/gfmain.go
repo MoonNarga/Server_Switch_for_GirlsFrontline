@@ -16,7 +16,7 @@ import (
 func main() {
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.OnRequest(match()).DoFunc(serverList())
-	proxy.OnRequest(match_o()).DoFunc(serverList_o())
+	proxy.OnRequest(matcho()).DoFunc(serverListo())
 	log.Println("ProxyServer starts successfully")
 	log.Printf("Listening on %s:%d\n", GetLocalIP(), 8888)
 	log.Fatal(http.ListenAndServe(":8888", proxy))
@@ -61,7 +61,7 @@ func serverList() func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request,
 	}
 }
 
-func match_o() goproxy.ReqConditionFunc {
+func matcho() goproxy.ReqConditionFunc {
 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
 		if req.URL.Host == "ios.transit.gf.ppgame.com" {
 			if strings.HasPrefix(req.URL.Path, "/index") || strings.HasPrefix(req.URL.Path, "index") {
@@ -75,7 +75,7 @@ func match_o() goproxy.ReqConditionFunc {
 	}
 }
 
-func serverList_o() func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+func serverListo() func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	return func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		var url string
 		if strings.HasPrefix(req.URL.Path, "/") {
