@@ -1,6 +1,6 @@
 function FindProxyForURL(url, host) {
-    if ( dnsDomainIs(host, "intranet.domain.com")||
-    dnsDomainIs(host, "intranet.domain.com") ) {
+    if ( dnsDomainIs(host, "adr.transit.gf.ppgame.com")||
+    dnsDomainIs(host, "ios.transit.gf.ppgame.com") ) {
 		return 'PROXY 47.98.34.99:8888';
     }
 	
