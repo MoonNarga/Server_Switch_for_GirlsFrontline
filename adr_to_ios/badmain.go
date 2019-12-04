@@ -65,24 +65,36 @@ func (e *EventHandler) BeforeRequest(ctx *goproxy.Context) {
 		// ctx.Req.URL.Host = "ios.transit.gf.ppgame.com"
 		// ctx.Req.Host = "ios.transit.gf.ppgame.com"
 		ctx.Req.Header.Set("Host", "ios.transit.gf.ppgame.com")
-
+		body, err := ioutil.ReadAll(ctx.Req.Body)
+		if err != nil {
+			// 错误处理
+			return
+		}
+		// Request.Body只能读取一次, 读取后必须再放回去
+		// Response.Body同理
+		str := string(body)
+		strings.Replace(str, "mica", "appstore", -1)
+		body = []byte(str)
+		ctx.Req.Body = ioutil.NopCloser(bytes.NewReader(body))
 	}
-	if ctx.Req.URL.Hostname() == "gf-adrgw-cn-zs-game-0001.ppgame.com" {
-		ctx.Req.Header.Set("Host", "gf-ios-cn-zs-game-0001.ppgame.com")
 
+	if ctx.Req.URL.Hostname() == "ios.transit.gf.ppgame.com" {
+		// ctx.Req.URL.Host = "ios.transit.gf.ppgame.com"
+		// ctx.Req.Host = "ios.transit.gf.ppgame.com"
+		ctx.Req.Header.Set("Host", "adr.transit.gf.ppgame.com")
+		body, err := ioutil.ReadAll(ctx.Req.Body)
+		if err != nil {
+			// 错误处理
+			return
+		}
+		// Request.Body只能读取一次, 读取后必须再放回去
+		// Response.Body同理
+		str := string(body)
+		strings.Replace(str, "appstore", "mica", -1)
+		body = []byte(str)
+		ctx.Req.Body = ioutil.NopCloser(bytes.NewReader(body))
 	}
 	// 读取Body
-	body, err := ioutil.ReadAll(ctx.Req.Body)
-	if err != nil {
-		// 错误处理
-		return
-	}
-	// Request.Body只能读取一次, 读取后必须再放回去
-	// Response.Body同理
-	str := string(body)
-	strings.Replace(str, "mica", "appstore", -1)
-	body = []byte(str)
-	ctx.Req.Body = ioutil.NopCloser(bytes.NewReader(body))
 
 }
 
