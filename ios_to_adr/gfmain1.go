@@ -3,27 +3,28 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/elazarl/goproxy"
 	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/elazarl/goproxy"
 )
 
 func main() {
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.OnRequest(match()).DoFunc(serverList())
 	log.Println("ProxyServer starts successfully")
-	log.Printf("Listening on %s:%d\n", GetLocalIP(), 8888)
-	log.Fatal(http.ListenAndServe(":8888", proxy))
+	// log.Printf("Listening on %s:%d\n", GetLocalIP(), 8889)
+	log.Fatal(http.ListenAndServe(":8889", proxy))
 }
 
 func match() goproxy.ReqConditionFunc {
 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
-		if req.URL.Host == "adr.transit.gf.ppgame.com" {
-			if strings.HasPrefix(req.URL.Path, "/index") || strings.HasPrefix(req.URL.Path, "index"){
+		if req.URL.Host == "ios.transit.gf.ppgame.com" {
+			if strings.HasPrefix(req.URL.Path, "/index") || strings.HasPrefix(req.URL.Path, "index") {
 				return true
 			} else {
 				return false
@@ -38,16 +39,16 @@ func serverList() func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request,
 	return func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		var url string
 		if strings.HasPrefix(req.URL.Path, "/") {
-			url = fmt.Sprintf("%s://%s%s", req.URL.Scheme, strings.Replace(req.URL.Host, "adr", "ios", -1), req.URL.Path)
+			url = fmt.Sprintf("%s://%s%s", req.URL.Scheme, strings.Replace(req.URL.Host, "ios", "adr", -1), req.URL.Path)
 		} else {
-			url = fmt.Sprintf("%s://%s/%s", req.URL.Scheme, strings.Replace(req.URL.Host, "adr", "ios", -1), req.URL.Path)
+			url = fmt.Sprintf("%s://%s/%s", req.URL.Scheme, strings.Replace(req.URL.Host, "ios", "adr", -1), req.URL.Path)
 		}
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
 			log.Fatal(err)
 			return nil, nil
 		}
-		data := strings.Replace(string(body), "mica", "appstore", -1)
+		data := strings.Replace(string(body), "appstore", "mica", -1)
 		r, err := http.NewRequest(req.Method, url, bytes.NewBuffer([]byte(data)))
 		if err != nil {
 			log.Fatal(err)
