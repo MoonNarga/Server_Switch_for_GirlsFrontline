@@ -60,7 +60,7 @@ func serverList() func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request,
 	}
 }
 
-func setHeader(or, nr *http.Request) {
+func setHeader(or, nr *http.Request) {~
 	for k, v := range or.Header {
 		for _, vl := range v {
 			nr.Header.Add(k, vl)
