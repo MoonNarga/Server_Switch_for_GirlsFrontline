@@ -35,7 +35,7 @@ var (
 )
 
 func init() {
-	flag.IntVar(&listenPort, "port", 8080, "port on which the proxy server listens to")
+	flag.IntVar(&listenPort, "port", 8888, "port on which the proxy server listens to")
 	flag.StringVar(&blackListConfFile, "conf", "", "path to the configuration file for blacklist urls")
 	flag.StringVar(&src, "src", "ios", "source platform, default ios")
 	flag.StringVar(&dst, "dst", "adr", "destination platform, default adr")
